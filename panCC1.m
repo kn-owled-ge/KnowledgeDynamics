@@ -21,14 +21,15 @@ IN = zeros(size(kmtrx));
 GP = zeros(size(kmtrx));
 
 % physical investment
-IK = ((max(kpmtrx./kmtrx - (1-P.delK/P.lambk),1e-3).*(P.lambk/(P.delK^(1-P.lambk)))).^(1/P.lambk)).*kmtrx;
+IK = ((max(kpmtrx./kmtrx - P.lamb1k,1e-3)./P.lamb2k).^(1/P.lamb3k)).*kmtrx;
+
 
 % NaN IK where there was exit
 IK(Gft(:,1:end-1)~=0)=NaN;
 
 % cash flow
 OI   = zmtrx.*kmtrx.^P.theta;
-FCF  = (1-P.tauC).*OI + P.tauC*P.delK.*kmtrx - IK;
+FCF  = (1-P.tauC).*(OI-IK);
 DV   = FCF;
 
 end

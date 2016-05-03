@@ -41,16 +41,17 @@ P.theta  = over(1);                                  % capital's scale in income
 P.rhoZ   = over(2);                                  % persistence of income proc
 P.muZ    = over(3);                                  % mean of income proc is hard coded zero
 P.sigZ   = over(4);                                  % SD of income proc shock
-P.delK   = over(5);                                  % physical depreciation
-P.lambk  = over(6);                                  % physical elasticity
-P.beta   = over(7);                                  % Discount factor=1/(1+r*) (to match data going from DV to V)
-P.tauC   = over(8);                                  % wedge from OI to FCF (tax rate*)
-P.Pext   = over(9);                                  % Probability of random exit per year = pi
-P.MQent  = over(10);                                 % Mean of Q at entry
-P.SQent  = over(11);                                 % SD of Q at entry
+P.lamb1k = over(5);                                  % 1 param of physical
+P.lamb2k = over(6);                                  % 2 param of physical
+P.lamb3k = over(7);                                  % 3 param of physical
+P.beta   = over(8);                                  % Discount factor=1/(1+r*) (to match data going from DV to V)
+P.tauC   = over(9);                                  % wedge from OI to FCF (tax rate*)
+P.Pext   = over(10);                                 % Probability of random exit per year = pi
+P.MQent  = over(11);                                 % Mean of Q at entry
+P.SQent  = over(12);                                 % SD of Q at entry
 
 % exit values
-P.ExEnt = true;                                       % is there exit (and entry) in the model?
+P.ExEnt = false;                                      % is there exit (and entry) in the model?
 P.Vexit = 0;                                          % value scale too low to remain
 P.Kexit = 0;                                          % capital scale too low to remain
 P.Bexit = 5;                                          % minimal value scale to register as major bankruptcy
@@ -120,26 +121,22 @@ w    = 0;
 fail = false;
 r    = (1-P.beta)/P.beta;
 
+% not too high or low physical depreciation
+delK = ((1-P.lamb1k)/P.lamb2k)^(1/P.lamb3k);
+fail = fail | (delK>0.25) | (delK<0.02);
+
+% capital is not cheaper than its installed value
+dblK = ((2-P.lamb1k)/P.lamb2k)^(1/P.lamb3k);
+fail = fail | (dblK<1+delK);
+
 % FCF at max(z) for stagnant scale 10 firm is positive, and value is
 % within reasonable scale
 lK = 10;
 OI = exp(z(end) + P.theta*lK);
-dK = P.delK*exp(lK);
+dK = delK*exp(lK);
 FC = (1-P.tauC)*(OI-dK);
 TV = FC/r;
 fail = fail | (TV<exp(lK-1)) | (TV>exp(lK+8));
-
-% Firm at P.muZ prefers being at lK=5 to lK=2 or lK=8
-OI2 = exp(P.muZ + P.theta*2);
-OI5 = exp(P.muZ + P.theta*5);
-OI8 = exp(P.muZ + P.theta*8);
-dK2 = P.delK*exp(2);
-dK5 = P.delK*exp(5);
-dK8 = P.delK*exp(8);
-FC2 = (1-P.tauC)*(OI2-dK2);
-FC5 = (1-P.tauC)*(OI5-dK5);
-FC8 = (1-P.tauC)*(OI8-dK8);
-fail = fail | (FC5<FC2) | (FC5<FC8);
 
 %if(fail)
 %   fprintf(P.fid,'Failure when verifying params!\n');

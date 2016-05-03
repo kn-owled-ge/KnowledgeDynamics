@@ -119,8 +119,9 @@ try
    [b1,~] = robustfit(VR1(good2),FVR1(good2));
 
    mom(pos+1) = median(VR1);
-   mom(pos+2) = b1(2);
-   pos = pos+2;
+   mom(pos+2) = mad(VR1);
+   mom(pos+3) = b1(2);
+   pos = pos+3;
 
 
    %%% Q %%%
@@ -181,8 +182,7 @@ try
 
    mom(pos+1) = median(VR1);
    mom(pos+2) = b1(2);
-   mom(pos+3) = st.robust_s;
-   pos = pos+3;
+   pos = pos+2;
 
 
    %%% T %%%
@@ -262,11 +262,28 @@ try
    mom(pos+1) = median(VR1);
    pos = pos+1;
    
-   
-   %%% T on Q %%%
-   [b1,~] = robustfit(uQ(gQ),uT(gQ));
 
-   mom(pos+1) = b1(2);
+   %%% rK %%%
+   VR  = rK;
+
+   % take ind fixed effects
+   if(size(uFE,2)>1)
+      bVR  = robustfit(rFE,VR(GV),'bisquare',4.685,'off');
+      mVR  = median(VR(GV));
+      VR0  = VR(GV) - rFE*bVR + mVR;
+      %FVR0 = FVR(GV) - rFE*bVR + mVR;
+   else
+      VR0  = VR(GV);
+      %FVR0 = FVR(GV);
+   end
+
+   % cut off outliers
+   prc1  = prctile(VR0,[0.5,99.5]);
+   good1 = VR0>prc1(1) & VR0<prc1(2);
+   VR1   = VR0(good1);
+   %FVR1  = FVR0(good1);
+
+   mom(pos+1) = mad(VR1);
    pos = pos+1;
 
 catch ex

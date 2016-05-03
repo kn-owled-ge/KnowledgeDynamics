@@ -42,7 +42,7 @@ mask = isnan(sum(Data(:,end-2:end),2));
 Data = Data(~mask,:);
 
 % get moms
-mom = distmoms_all(P, Data);
+mom = distmoms(P, Data);
 end
 
 function ret = vec1(val)

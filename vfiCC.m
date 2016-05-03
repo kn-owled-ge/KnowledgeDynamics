@@ -51,7 +51,7 @@ lnmtrx = kron(repmat(ln, 1, P.nz*P.nx*P.nw), ones(P.nk,1));              % n cha
 zmtrx  = repmat(kron(z, ones(P.nx*P.nw, 1))', P.nk*P.nn, 1);             % z changes the slowest
 
 % gross profits (independent of firm choices)
-GP = (1-P.tauC).*exp(zmtrx + P.theta.*lkmtrx) + P.tauC*P.delK.*exp(lkmtrx);
+GP = (1-P.tauC).*exp(zmtrx + P.theta.*lkmtrx);
 
 % Initializing VFI
 errK     = single(Inf);
@@ -107,10 +107,10 @@ while (1)
                   tIN   = kron(IN, ones(nkp,1));
                   
                   for jk = 1:nk
-                     IK  = ((max(kp./k(jk) - (1-P.delK/P.lambk),0).*(P.lambk/(P.delK^(1-P.lambk)))).^(1/P.lambk)).*k(jk);
+                     IK  = ((max(kp./k(jk) - P.lamb1k,0)./P.lamb2k).^(1/P.lamb3k)).*k(jk);
                      tIK = kron(ones(nnp,1), IK);
                      
-                     tObj = -tIK + EMV;
+                     tObj = -(1-P.tauC).*tIK + EMV;
                      
                      % direct discrete maximization
                      [Obj((jn-1)*nk+jk, pos), optJ]  = max(tObj);
