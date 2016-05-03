@@ -28,8 +28,9 @@ IK = ((max(kpmtrx./kmtrx - P.lamb1k,1e-3)./P.lamb2k).^(1/P.lamb3k)).*kmtrx;
 IK(Gft(:,1:end-1)~=0)=NaN;
 
 % cash flow
+delK = ((1-P.lamb1k)/P.lamb2k)^(1/P.lamb3k);
 OI   = zmtrx.*kmtrx.^P.theta;
-FCF  = (1-P.tauC).*(OI-IK);
+FCF  = (1-P.tauC).*OI + P.tauC.*delK.*kmtrx - IK;
 DV   = FCF;
 
 end
