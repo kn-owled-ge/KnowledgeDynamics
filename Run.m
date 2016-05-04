@@ -5,9 +5,9 @@ warning('on','all');
 
 %%
 
-%      [1      2      3      4      5      6      7      8      9      10     11     12 
-%      [theta  rhoZ   muZ    sigZ   lamb1k lamb2k lamb3k beta   tauC   pi     MQent  SQent ] 
-over = [0.607  0.956  0.704  0.375  0.700  0.807  0.446  0.861  0.355  0.095  2.000  1.000 ];
+%      [1      2      3      4      5      6      7      8      9      10     11   
+%      [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   pi     MQent  SQent ] 
+over = [0.607  0.956  0.708  0.422  0.100  0.274  0.861  0.355  0.095  2.000  1.000 ];
 fid  = 1; % {1 = screen, NaN = file}
 
 % get data

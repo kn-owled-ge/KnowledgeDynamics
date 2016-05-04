@@ -107,7 +107,7 @@ while (1)
                   tIN   = kron(IN, ones(nkp,1));
                   
                   for jk = 1:nk
-                     IK  = ((max(kp./k(jk) - P.lamb1k,0)./P.lamb2k).^(1/P.lamb3k)).*k(jk);
+                     IK  = ((max(kp./k(jk) - (1-P.delK/P.lambK),0).*P.lambK./(P.delK^(1-P.lambK))).^(1/P.lambK)).*k(jk);
                      tIK = kron(ones(nnp,1), IK);
                      
                      tObj = -(1-P.tauC).*tIK + EMV;

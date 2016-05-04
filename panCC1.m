@@ -21,7 +21,7 @@ IN = zeros(size(kmtrx));
 GP = zeros(size(kmtrx));
 
 % physical investment
-IK = ((max(kpmtrx./kmtrx - P.lamb1k,1e-3)./P.lamb2k).^(1/P.lamb3k)).*kmtrx;
+IK = ((max(kpmtrx./kmtrx - (1-P.delK/P.lambK),1e-3).*P.lambK./(P.delK^(1-P.lambK))).^(1/P.lambK)).*kmtrx;
 
 
 % NaN IK where there was exit
