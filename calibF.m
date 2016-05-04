@@ -125,7 +125,7 @@ r    = (1-P.beta)/P.beta;
 lK = 10;
 OI = exp(z(end) + P.theta*lK);
 dK = P.delK*exp(lK);
-FC = (1-P.tauC)*(OI-dK);
+FC = (1-P.tauC)*OI + P.tauC*P.delK*exp(lK) - dK;
 TV = FC/r;
 fail = fail | (TV<exp(lK-1)) | (TV>exp(lK+8));
 

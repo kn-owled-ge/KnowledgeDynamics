@@ -18,15 +18,15 @@ parpool(c,16);
 %}
 
 % Prepare params
-D.method   = 'pattern';                          % 'gradient'/'anneal'/'pattern'/'multis'
+D.method   = 'gradient';                          % 'gradient'/'anneal'/'pattern'/'multis'
 D.useVC    = false;                              % use bootstrapped VC matrix?
 
 %          [1      2      3      4      5      6      7      8      9      10     11   
 %          [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   pi     MQent  SQent ] 
-D.initX1 = [0.607  0.956  0.708  0.422  0.100  0.274  0.861  0.355  0.095  2.000  1.000 ];
+D.initX1 = [0.637  0.947  0.657  0.453  0.100  0.26  0.861  0.355  0.095  2.000  1.000 ];
 
 %         [theta  rhoZ   muZ    sigZ   lambk  beta ]
-D.initX = [0.607  0.956  0.704  0.375  0.446  0.861];
+D.initX = [0.607  0.956  0.708  0.422  0.274  0.861];
 
 D.lbX   = [0.300, 0.800, 0.000, 0.010, 0.050, 0.800];
 D.ubX   = [0.900, 0.990, 2.000, 0.900, 0.950, 0.970];

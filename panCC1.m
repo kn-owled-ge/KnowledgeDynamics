@@ -29,7 +29,7 @@ IK(Gft(:,1:end-1)~=0)=NaN;
 
 % cash flow
 OI   = zmtrx.*kmtrx.^P.theta;
-FCF  = (1-P.tauC).*(OI-IK);
+FCF  = (1-P.tauC).*OI + P.tauC.*P.delK.*kmtrx - IK;
 DV   = FCF;
 
 end
