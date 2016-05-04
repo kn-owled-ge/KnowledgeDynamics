@@ -221,7 +221,3 @@ pip-log.txt
 
 codegen/
 *.mexw64
-*.prj
-*.csv
-*.txt
-*.mat
