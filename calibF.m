@@ -67,7 +67,7 @@ P.Tb     = int32(300);                                % number of burn-in period
 P.Ts2    = int32(30);                                 % number of periods in moment simulations
 P.Reps   = int32(1);                                  % number of repeats for moment simulations
 %P.Nmoms  = int32(306);                                % number of moments returned by moment func
-P.Nmoms  = int32(11);                                 % number of moments returned by moment func
+P.Nmoms  = int32(13);                                 % number of moments returned by moment func
 P.VCreps = int32(100);                                % number of repeats for VC bootstrap
 
 % Construct grid for physical stock

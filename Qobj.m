@@ -1,13 +1,16 @@
 function Q = Qobj(D, b)
 
 over = D.initX1;
-
+%{
 over(1)  = b(1);
 over(2)  = b(2);
 over(3)  = b(3);
 over(4)  = b(4);
 over(6)  = b(5);
 over(7)  = b(6);
+%}
+
+over(1:8) = b(1:8);
 
 [Smom,~,~] = modelF(over,D.fid);
 diff = (D.Dmom-Smom);

@@ -6,8 +6,9 @@ warning('on','all');
 
 %      [1      2      3      4      5      6      7      8      9      10     11     12 
 %      [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   pi     MQent  SQent ] 
-over = [0.607  0.956  0.708  0.422  0.100  0.274  0.861  0.355  0.095  2.000  1.000 ];
-fid  = nan; % {1 = screen, NaN = file}
+over = [0.728  0.933  0.144  0.368  0.110  0.381  0.892  0.396  0.095  2.000  1.000 ]; %Q =        0.183
+
+fid  = 1; % {1 = screen, NaN = file}
 
 %%%%% ModelF.m %%%%%%
 

@@ -23,14 +23,12 @@ D.useVC    = false;                              % use bootstrapped VC matrix?
 
 %          [1      2      3      4      5      6      7      8      9      10     11   
 %          [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   pi     MQent  SQent ] 
-D.initX1 = [0.637  0.947  0.657  0.467  0.100  0.225  0.873  0.355  0.095  2.000  1.000 ];
+D.initX1 = [0.728  0.933  0.144  0.368  0.110  0.381  0.892  0.396  0.095  2.000  1.000 ]; %Q =        0.183
 
-%         [theta  rhoZ   muZ    sigZ   lambk  beta ]
-D.initX = [0.637  0.947  0.657  0.467  0.225  0.873];
-
-D.lbX   = [0.300, 0.800, 0.000, 0.010, 0.050, 0.800];
-D.ubX   = [0.900, 0.990, 2.000, 0.900, 0.950, 0.970];
-
+%         [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC ]
+D.initX = [0.728  0.933  0.144  0.368  0.110  0.381  0.892  0.396];
+D.lbX   = [0.400, 0.900, 0.000, 0.010, 0.070, 0.050, 0.800, 0.200];
+D.ubX   = [0.800, 0.990, 2.000, 0.900, 0.130, 0.950, 0.970, 0.500];
 
 % Get a P structure for all the defs (and open log)
 fid    = 1;
@@ -53,7 +51,7 @@ if (D.useVC)
 else
    %wgts = ones(size(D.moms));
    %D.W  = diag((abs(D.Dmom(D.moms)).^-2)'.*wgts)./sum(wgts);
-   D.W  = diag([0.5 2 1 2 1 2 2 1 5 5 2]);
+   D.W  = diag([1.6 10 10 5 10 10 5 6 8 5 8 10 10]);
    %clear wgts;
 end
 
