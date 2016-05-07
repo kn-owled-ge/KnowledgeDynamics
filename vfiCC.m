@@ -43,16 +43,6 @@ nzxw     = nz*nx*nw;
 Qxw  = single(kron(Qx, Qw ));
 Qzxw = single(kron(Qz, Qxw));
 
-% State-space matrices
-lkmtrx = repmat(lk, P.nn, P.nz*P.nx*P.nw);                               % k changes the fastest
-lnmtrx = kron(repmat(ln, 1, P.nz*P.nx*P.nw), ones(P.nk,1));              % n changes the slowest
-%wmtrx  = repmat(repmat(w, P.nz*P.nx, 1)', P.nk*P.nn, 1);                 % w changes the fastest
-%xmtrx  = repmat(repmat(kron(x, ones(P.nw, 1)), P.nz, 1)', P.nk*P.nn, 1); % x changes the second fastest
-zmtrx  = repmat(kron(z, ones(P.nx*P.nw, 1))', P.nk*P.nn, 1);             % z changes the slowest
-
-% gross profits (independent of firm choices)
-GP = (1-P.tauC).*exp(zmtrx + P.theta.*lkmtrx) + P.tauC*P.delK.*exp(lkmtrx);
-
 % Initializing VFI
 errK     = single(Inf);
 errN     = single(Inf);
@@ -66,6 +56,7 @@ optN     = single(zeros(nkn, nzxw));
 optKold  = optK + 1;
 optNold  = optN + 1;
 Obj      = single(zeros(nkn, nzxw));
+mInf     = single(1E30.*ones(nknp,1));
 
 % Start VFI
 while (1)
@@ -110,7 +101,20 @@ while (1)
                      IK  = ((max(kp./k(jk) - (1-P.delK/P.lambK),0).*P.lambK./(P.delK^(1-P.lambK))).^(1/P.lambK)).*k(jk);
                      tIK = kron(ones(nnp,1), IK);
                      
-                     tObj = -tIK + EMV;
+                     FCF = (1-P.tauC)*exp(z(jz) + P.theta*lk(jk)) + P.tauC*P.delK*k(jk) - tIK;
+                     
+                     if(P.doFin)
+                        FUB     = -k(jk)/(2*P.gama);
+                        FCFpos  = FCF>=0;
+                        FCFneg  = ~FCFpos;
+                        FCFlow  = FCF<FUB;
+                        FCF1    = -k(jk)/P.gama + sqrt(max((k(jk)/P.gama)^2 + (2*k(jk).*FCF./P.gama),0));
+                        DV      = FCFpos.*FCF + FCFneg.*FCF1 - FCFlow.*mInf;
+                     else
+                        DV = FCF;
+                     end
+                     
+                     tObj = DV + EMV;
                      
                      % direct discrete maximization
                      [Obj((jn-1)*nk+jk, pos), optJ]  = max(tObj);
@@ -127,7 +131,7 @@ while (1)
       end
       
       % update value function
-      V     = max(GP + Obj,exp(-10));
+      V     = max(Obj,exp(-10));
 
       % convergence criteria
       errK  = max(max(abs(optK   - optKold)));

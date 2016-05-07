@@ -1,5 +1,5 @@
+
 %set pwd
-%{
 disp('starting');
 cd('/gpfs/fs1/home/rparham2/Documents/MATLAB');
 
@@ -9,26 +9,52 @@ JOB_ID=getenv('SLURM_JOBID');
 CPUS=str2num(getenv('SLURM_CPUS_PER_TASK'));
 pc.JobStorageLocation=strcat('/local_scratch/',JOB_ID);
 parpool(pc,CPUS);
-%}
-%{
-delete(gcp('nocreate'))
-c = parcluster;
-c.NumWorkers = 16;
-parpool(c,16);
-%}
 
 % Prepare params
-D.method   = 'pattern';                          % 'gradient'/'anneal'/'pattern'/'multis'
+D.method   = 'multis';                          % 'gradient'/'anneal'/'pattern'/'multis'
 D.useVC    = false;                              % use bootstrapped VC matrix?
 
-%          [1      2      3      4      5      6      7      8      9      10     11   
-%          [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   pi     MQent  SQent ] 
-D.initX1 = [0.728  0.933  0.144  0.368  0.110  0.381  0.892  0.396  0.095  2.000  1.000 ]; %Q =        0.183
+%          [1      2      3      4      5      6      7      8      9      10     11     12    ]
+%          [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   gama   pi     MQent  SQent ] 
+D.initX1 = [0.728  0.933  0.144  0.384  0.110  0.377  0.892  0.350  0.070  0.095  2.000  1.000 ];
 
-%         [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC ]
-D.initX = [0.728  0.933  0.144  0.368  0.110  0.381  0.892  0.396];
-D.lbX   = [0.400, 0.900, 0.000, 0.010, 0.070, 0.050, 0.800, 0.200];
-D.ubX   = [0.800, 0.990, 2.000, 0.900, 0.130, 0.950, 0.970, 0.500];
+%         [theta  rhoZ   muZ    sigZ   lambK  beta   gama ]
+D.initX = [0.728  0.933  0.144  0.368  0.455  0.892  0.500];
+D.lbX   = [0.600, 0.850, 0.000, 0.100, 0.050, 0.800, 0.010];
+D.ubX   = [0.800, 0.990, 1.000, 0.600, 0.950, 0.970, 0.990];
+
+%%
+%{
+% Prepare starting points
+N    = 400;
+L    = size(D.initX,2);
+b    = zeros(N,L);
+good = true(N,1);
+over = D.initX1;
+fid  = 1;
+
+for i=1:N
+   b(i,:) = D.lbX + rand(1,L).*(D.ubX-D.lbX);
+   
+   over(1)  = b(i,1);
+   over(2)  = b(i,2);
+   over(3)  = b(i,3);
+   over(4)  = b(i,4);
+   over(6)  = b(i,5);
+   over(7)  = b(i,6);
+   over(9)  = b(i,7);
+
+   [~, ~, ~, ~, ~, ~, ~, ~, ~, ~, ~, fail] = calibF(over,fid);
+   good(i) = ~fail;
+end
+sum(good)
+ptmatrix = b(good,:);
+ptmatrix = [ptmatrix ; D.initX];
+save ('ptmatrix', 'ptmatrix');
+clear good over N L b 
+%}
+
+%%
 
 % Get a P structure for all the defs (and open log)
 fid    = 1;
@@ -51,7 +77,7 @@ if (D.useVC)
 else
    %wgts = ones(size(D.moms));
    %D.W  = diag((abs(D.Dmom(D.moms)).^-2)'.*wgts)./sum(wgts);
-   D.W  = diag([1.6 10 10 5 10 10 5 6 8 5 8 10 10]);
+   D.W  = diag([1.6 10 10 4 10 10 4 6 8 5 8 10 10 3 3]);
    %clear wgts;
 end
 
@@ -105,7 +131,7 @@ elseif (strcmp(D.method,'pattern'))
 elseif (strcmp(D.method,'multis'))
    options = optimoptions('fmincon');
    options = optimoptions(options, 'Display'       , 'off'            );  % 'off'/'iter'/'final'
-   options = optimoptions(options, 'MaxFunEvals'   , 500              );
+   options = optimoptions(options, 'MaxFunEvals'   , 50               );
    options = optimoptions(options, 'FinDiffRelStep', 0.01             );
    options = optimoptions(options, 'Algorithm'     , 'interior-point' );  % 'interior-point'/'active-set'/'sqp'
    options = optimoptions(options, 'TolX'          , 1E-3             );

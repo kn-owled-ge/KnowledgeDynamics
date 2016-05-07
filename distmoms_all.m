@@ -228,7 +228,19 @@ try
    pos  = pos + pos1;
 
    
+   % regression coeffs
+   
+   [b, ~] = robustfit([lK1,lOI1,lIK1],lV1);
+   mom(pos+1:pos+3) = b(2:4);
+   pos = pos + 3;
+   
+   [b, ~] = robustfit([Q1,R1],T1);
+   mom(pos+1:pos+2) = b(2:3);
+   pos = pos + 2;
+   
+   
    % correlations
+   
    Dat = [lK1, lV1, lOI1, lIK1, Q1, R1, T1, DVK1, DVV1, rK1, rV1, rOI1, rIK1, rQ1, rR1, rT1, rDVK1, rDVV1];
    cr  = corr(Dat);
    crv = cr(tril(true(size(cr)),-1));

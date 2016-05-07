@@ -16,6 +16,7 @@ eZft = exp(Zft);
 kmtrx  = eKft(:,1:end-1);
 kpmtrx = eKft(:,2:end);
 zmtrx  = eZft(:,1:end-1);
+mInf   = 1E30.*ones(size(kmtrx));
 
 IN = zeros(size(kmtrx));
 GP = zeros(size(kmtrx));
@@ -30,6 +31,20 @@ IK(Gft(:,1:end-1)~=0)=NaN;
 % cash flow
 OI   = zmtrx.*kmtrx.^P.theta;
 FCF  = (1-P.tauC).*OI + P.tauC.*P.delK.*kmtrx - IK;
-DV   = FCF;
+
+if (P.doFin)
+   FUB     = -(1/(2*P.gama)).*kmtrx;
+   FCFpos  = FCF>=0;
+   FCFneg  = ~FCFpos;
+   FCFlow  = FCF<FUB;
+   FCF1    = -(1/P.gama).*kmtrx + sqrt(max((kmtrx./P.gama).^2 + (2*kmtrx.*FCF./P.gama),0));
+   if(P.FinEx)
+      DV = FCFpos.*FCF + FCFneg.*FCF1 - FCFlow.*mInf;
+   else
+      DV = FCFpos.*FCF + FCFneg.*FCF1;
+   end
+else
+   DV = FCF;
+end
 
 end

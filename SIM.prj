@@ -340,7 +340,7 @@
     <param.AutoInferUseUnboundedSize>false</param.AutoInferUseUnboundedSize>
     <param.AutoInferVariableSizeThreshold>1024</param.AutoInferVariableSizeThreshold>
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
-    <param.AnnotationChecksum>986976856</param.AnnotationChecksum>
+    <param.AnnotationChecksum>2223036187</param.AnnotationChecksum>
     <param.mex.outputfile>simCC_mex</param.mex.outputfile>
     <param.grt.outputfile>simCC</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
@@ -438,7 +438,7 @@
       <param.DefaultFixedPointSignedness />
     </unset>
     <fileset.entrypoints>
-      <file custom-data-expanded="true" value="${PROJECT_ROOT}\simCC.m">
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}\simCC.m">
         <Inputs fileName="simCC.m" functionName="simCC">
           <Input Name="P">
             <Class>struct</Class>
@@ -595,6 +595,14 @@
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </Field>
+            <Field Name="gama">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
             <Field Name="Pext">
               <Class>double</Class>
               <Size>1 x 1</Size>
@@ -618,6 +626,20 @@
               <InitialValue />
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
+            </Field>
+            <Field Name="doFin">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="FinEx">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
             </Field>
             <Field Name="ExEnt">
               <Class>logical</Class>

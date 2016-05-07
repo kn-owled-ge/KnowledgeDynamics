@@ -10,9 +10,6 @@ parfor i=1:reps
    Dati     = Data(randi(nobs,nobs,1),:);
    mom      = distmoms_all(P,Dati);
    inf(i,:) = mom';
-   if (mod(i,10)==1)
-      disp(i);
-   end
 end
 warning('on','all');
 

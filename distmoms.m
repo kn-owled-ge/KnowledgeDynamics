@@ -158,6 +158,7 @@ try
    uQ = VR0;
    gQ = good1;
 
+   
    %%% R %%%
    VR  = R;
    FVR = F_R;
@@ -178,6 +179,8 @@ try
    good1 = VR0>prc1(1) & VR0<prc1(2);
    VR1   = VR0(good1);
    FVR1  = FVR0(good1);
+   prc2  = prctile(FVR1,[0.1,99.9]);
+   good2 = FVR1>prc2(1) & FVR1<prc2(2);
 
    [b1,st] = robustfit(VR1(good2),FVR1(good2));
 
@@ -186,27 +189,33 @@ try
    mom(pos+3) = st.robust_s;
    pos = pos+3;
 
+   % save Q results for latet
+   uR = VR0;
+   gR = good1;
+
 
    %%% T %%%
    VR  = T;
-   %FVR = F_T;
+   FVR = F_T;
 
    % take ind fixed effects
    if(size(uFE,2)>1)
       bVR  = robustfit(rFE,VR(GV),'bisquare',4.685,'off');
       mVR  = median(VR(GV));
       VR0  = VR(GV) - rFE*bVR + mVR;
-      %FVR0 = FVR(GV) - rFE*bVR + mVR;
+      FVR0 = FVR(GV) - rFE*bVR + mVR;
    else
       VR0  = VR(GV);
-      %FVR0 = FVR(GV);
+      FVR0 = FVR(GV);
    end
 
    % cut off outliers
    prc1  = prctile(VR0,[0.5,99.5]);
    good1 = VR0>prc1(1) & VR0<prc1(2);
    VR1   = VR0(good1);
-   %FVR1  = FVR0(good1);
+   FVR1  = FVR0(good1);
+   prc2  = prctile(FVR1,[0.1,99.9]);
+   good2 = FVR1>prc2(1) & FVR1<prc2(2);
 
    [~,st] = robustfit(VR1(good2),FVR1(good2));
 
@@ -216,6 +225,7 @@ try
    
    % save T results for later
    uT = VR0;
+   gT = good1;
    
 
    %%% DVK %%%
@@ -266,6 +276,12 @@ try
 
    mom(pos+1) = median(VR1);
    pos = pos+1;
+   
+   
+   %%% reg [Q,R],T %%%
+   [b,~] = robustfit([uQ(gQ&gR) uR(gQ&gR)], uT(gQ&gR));
+   mom(pos+1:pos+2) = b(2:3);
+   pos = pos+2;
    
 catch ex
    disp(ex);
