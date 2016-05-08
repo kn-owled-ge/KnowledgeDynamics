@@ -94,14 +94,16 @@ while (1)
                end
                
                for jn = 1:nn
-                  IN    = 0;
+                  INbar = P.delN*n(jn);
+                  INtil = ((max(np./n(jn) - (1-P.delN/P.lambN),0).*P.lambN./(P.delN^(1-P.lambN))).^(1/P.lambN)).*n(jn);
+                  IN    = (INtil<=INbar).*INtil + (INtil>INbar & INtil<=(1/P.alpha)*INbar).*(INtil - P.alpha*INbar)./(1-P.alpha) + (INtil>(1/P.alpha)*INbar).*1E30;
                   tIN   = kron(IN, ones(nkp,1));
                   
                   for jk = 1:nk
                      IK  = ((max(kp./k(jk) - (1-P.delK/P.lambK),0).*P.lambK./(P.delK^(1-P.lambK))).^(1/P.lambK)).*k(jk);
                      tIK = kron(ones(nnp,1), IK);
                      
-                     FCF = (1-P.tauC)*exp(z(jz) + P.theta*lk(jk)) + P.tauC*P.delK*k(jk) - tIK;
+                     FCF = (1-P.tauC)*exp(z(jz) + P.theta*(P.omega*lk(jk) + (1-P.omega)*ln(jn))) + P.tauC*P.delK*k(jk) - tIK - (1-P.tauC-P.tauN)*tIN;
                      
                      if(P.doFin)
                         FUB     = -k(jk)/(2*P.gama);

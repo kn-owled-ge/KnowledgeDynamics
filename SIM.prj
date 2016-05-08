@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.matlabcoder" plugin-version="R2014a_nu">
-  <configuration build-checksum="967084039" file="C:\Users\robert.parham\OneDrive\Documents\KnowledgeDynamics\Prog\KnowledgeDynamics\SIM.prj" location="C:\Users\robert.parham\OneDrive\Documents\KnowledgeDynamics\Prog\KnowledgeDynamics" name="SIM" target="target.matlab.coder" target-name="MEX, C, and C++ Code Generation">
+  <configuration build-checksum="3449502996" file="C:\Users\robert.parham\OneDrive\Documents\KnowledgeDynamics\Prog\KnowledgeDynamics\SIM.prj" location="C:\Users\robert.parham\OneDrive\Documents\KnowledgeDynamics\Prog\KnowledgeDynamics" name="SIM" target="target.matlab.coder" target-name="MEX, C, and C++ Code Generation">
     <profile key="profile.mex">
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
@@ -340,7 +340,7 @@
     <param.AutoInferUseUnboundedSize>false</param.AutoInferUseUnboundedSize>
     <param.AutoInferVariableSizeThreshold>1024</param.AutoInferVariableSizeThreshold>
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
-    <param.AnnotationChecksum>2223036187</param.AnnotationChecksum>
+    <param.AnnotationChecksum>3324350829</param.AnnotationChecksum>
     <param.mex.outputfile>simCC_mex</param.mex.outputfile>
     <param.grt.outputfile>simCC</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
@@ -465,73 +465,15 @@
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </Field>
-            <Field Name="VIter">
-              <Class>double</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-              <Complex>false</Complex>
-            </Field>
-            <Field Name="VFIprn">
-              <Class>double</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-              <Complex>false</Complex>
-            </Field>
-            <Field Name="SIMprn">
-              <Class>double</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-              <Complex>false</Complex>
-            </Field>
-            <Field Name="SIMfin">
-              <Class>logical</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-            </Field>
-            <Field Name="SMOMprn">
-              <Class>logical</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-            </Field>
-            <Field Name="DMOMprn">
-              <Class>logical</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-            </Field>
-            <Field Name="EMOMprn">
-              <Class>logical</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-            </Field>
-            <Field Name="Vload">
-              <Class>logical</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-            </Field>
-            <Field Name="Vsave">
-              <Class>logical</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-            </Field>
             <Field Name="theta">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="omega">
               <Class>double</Class>
               <Size>1 x 1</Size>
               <Value />
@@ -579,7 +521,39 @@
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </Field>
+            <Field Name="delN">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="lambN">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="alpha">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
             <Field Name="beta">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="gama">
               <Class>double</Class>
               <Size>1 x 1</Size>
               <Value />
@@ -595,7 +569,7 @@
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </Field>
-            <Field Name="gama">
+            <Field Name="tauN">
               <Class>double</Class>
               <Size>1 x 1</Size>
               <Value />
@@ -672,6 +646,80 @@
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </Field>
+            <Field Name="VIter">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="VFIprn">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="SIMprn">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
+            <Field Name="SIMfin">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="SMOMprn">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="DMOMprn">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="EMOMprn">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="Vload">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="Vsave">
+              <Class>logical</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+            </Field>
+            <Field Name="Nmoms">
+              <Class>int32</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
             <Field Name="Verr">
               <Class>double</Class>
               <Size>1 x 1</Size>
@@ -729,14 +777,6 @@
               <Complex>false</Complex>
             </Field>
             <Field Name="Reps">
-              <Class>int32</Class>
-              <Size>1 x 1</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>true</UserDefined>
-              <Complex>false</Complex>
-            </Field>
-            <Field Name="Nmoms">
               <Class>int32</Class>
               <Size>1 x 1</Size>
               <Value />
@@ -808,6 +848,14 @@
               <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </Field>
+            <Field Name="maxN">
+              <Class>double</Class>
+              <Size>1 x 1</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </Field>
           </Input>
           <Input Name="k">
             <Class>double</Class>
@@ -819,7 +867,7 @@
           </Input>
           <Input Name="n">
             <Class>double</Class>
-            <Size>1 x 1</Size>
+            <Size>31 x 1</Size>
             <Value>n</Value>
             <InitialValue />
             <UserDefined>true</UserDefined>
@@ -851,7 +899,7 @@
           </Input>
           <Input Name="V0t">
             <Class>double</Class>
-            <Size>31 x 15</Size>
+            <Size>961 x 15</Size>
             <Value>V</Value>
             <InitialValue />
             <UserDefined>true</UserDefined>
@@ -859,7 +907,7 @@
           </Input>
           <Input Name="optKt">
             <Class>double</Class>
-            <Size>31 x 15</Size>
+            <Size>961 x 15</Size>
             <Value>V</Value>
             <InitialValue />
             <UserDefined>true</UserDefined>
@@ -867,7 +915,7 @@
           </Input>
           <Input Name="optNt">
             <Class>double</Class>
-            <Size>31 x 15</Size>
+            <Size>961 x 15</Size>
             <Value>V</Value>
             <InitialValue />
             <UserDefined>true</UserDefined>

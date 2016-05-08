@@ -42,7 +42,7 @@ for t = 1:Ts
       [kpd(j),npd(j),V(j,t)] = m_interp5(k,kd(j),n,nd(j),w,wd(j),x,xd(j),z,zd(j),optK,optN,V0);
 
       % impose upper bound
-      
+      npd(j) = min(npd(j),(nd(j)*P.maxN)-1E-3);
    end
    
    % do exit and entry
@@ -80,7 +80,7 @@ for t = 1:Ts
             %if (uk>cktmp(i1))
             %   continue;
             %end
-            un = n;
+            un = k(i2)*1; %TODO: 1 should be P.muN
             [~,~,uv] = m_interp5(k,uk,n,un,w,wd(1),x,xd(1),z,ztmp(i1),optK,optN,V0);
             newdist = abs(uv-uk - toQ(i1));
             if (newdist<currdist)

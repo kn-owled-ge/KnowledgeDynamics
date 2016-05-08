@@ -11,22 +11,22 @@ pc.JobStorageLocation=strcat('/local_scratch/',JOB_ID);
 parpool(pc,CPUS);
 
 % Prepare params
-D.method   = 'multis';                          % 'gradient'/'anneal'/'pattern'/'multis'
+D.method   = 'pattern';                          % 'gradient'/'anneal'/'pattern'/'multis'
 D.useVC    = false;                              % use bootstrapped VC matrix?
 
-%          [1      2      3      4      5      6      7      8      9      10     11     12    ]
-%          [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   gama   pi     MQent  SQent ] 
-D.initX1 = [0.728  0.933  0.144  0.384  0.110  0.377  0.892  0.350  0.070  0.095  2.000  1.000 ];
+%          [1      2      3      4      5      6      7      8      9      10     11     12     13     14     15     16     17    ]
+%          [theta  omega  rhoZ   muZ    sigZ   delK   lambK  delN   lambN  alpha  beta   gama   tauC   tauN   Pext   MQent  SQent ] 
+D.initX1 = [0.728  0.500  0.933  0.000  0.384  0.110  0.377  0.300  0.400  0.001  0.892  0.070  0.350  0.000  0.095  2.000  1.000 ];
 
-%         [theta  rhoZ   muZ    sigZ   lambK  beta   gama ]
-D.initX = [0.728  0.933  0.144  0.368  0.455  0.892  0.500];
-D.lbX   = [0.600, 0.850, 0.000, 0.100, 0.050, 0.800, 0.010];
-D.ubX   = [0.800, 0.990, 1.000, 0.600, 0.950, 0.970, 0.990];
+%         [theta  omega  rhoZ   sigZ   delK   lambK  delN   lambN  beta ]
+D.initX = [0.728  0.500  0.933  0.384  0.110  0.377  0.300  0.400  0.892];
+D.lbX   = [0.600, 0.100, 0.850, 0.050, 0.050, 0.050, 0.100, 0.050, 0.800];
+D.ubX   = [0.800, 0.900, 0.990, 0.800, 0.150, 0.950, 0.700, 0.950, 0.970];
 
 %%
 %{
 % Prepare starting points
-N    = 400;
+N    = 600;
 L    = size(D.initX,2);
 b    = zeros(N,L);
 good = true(N,1);
@@ -39,10 +39,12 @@ for i=1:N
    over(1)  = b(i,1);
    over(2)  = b(i,2);
    over(3)  = b(i,3);
-   over(4)  = b(i,4);
+   over(5)  = b(i,4);
    over(6)  = b(i,5);
    over(7)  = b(i,6);
-   over(9)  = b(i,7);
+   over(8)  = b(i,7);
+   over(9)  = b(i,8);
+   over(11) = b(i,9);
 
    [~, ~, ~, ~, ~, ~, ~, ~, ~, ~, ~, fail] = calibF(over,fid);
    good(i) = ~fail;
@@ -61,7 +63,7 @@ fid    = 1;
 P      = calibF(D.initX1,fid);
 
 % get data
-Dfile = 'data_160501BOTH.csv';          % which data file to use to create data moments
+Dfile = 'data_160508BOTH.csv';          % which data file to use to create data moments
 D.data = csvread(Dfile);
 D.Dmom = distmoms(P, D.data);
 
@@ -77,7 +79,7 @@ if (D.useVC)
 else
    %wgts = ones(size(D.moms));
    %D.W  = diag((abs(D.Dmom(D.moms)).^-2)'.*wgts)./sum(wgts);
-   D.W  = diag([1.6 10 10 4 10 10 4 6 8 5 8 10 10 3 3]);
+   D.W  = diag([1.6 10 10 4 10 10 4 6 8 5 8 5 8 10 10 10 10]);
    %clear wgts;
 end
 
@@ -162,7 +164,6 @@ if (D.fid ~= 1)
    fclose(D.fid);
 end
 
-%{
+
 delete(gcp('nocreate'))
 exit
-%}
