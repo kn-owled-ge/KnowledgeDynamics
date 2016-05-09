@@ -64,9 +64,9 @@ P.DMOMprn = false;                                    % print data moments
 P.EMOMprn = false;                                    % print relative moment errors
 P.Vload   = true;                                     % load previous value function?
 P.Vsave   = false;                                    % save current value function?
-%P.Nmoms   = int32(311);                               % number of moments returned by moment func
-P.Nmoms   = int32(17);                                % number of moments returned by moment func
-%P.Nmoms   = int32(21);                                % number of moments returned by moment func
+%P.Nmoms   = int32(629);                               % number of moments returned by moment func
+P.Nmoms   = int32(20);                                % number of moments returned by moment func
+%P.Nmoms   = int32(24);                                % number of moments returned by moment func
 
 % tolerance values
 P.Verr   = 1e-2;                                      % Maximum change in value function to stop VFI

@@ -10,23 +10,24 @@ CPUS=str2num(getenv('SLURM_CPUS_PER_TASK'));
 pc.JobStorageLocation=strcat('/local_scratch/',JOB_ID);
 parpool(pc,CPUS);
 
+
 % Prepare params
-D.method   = 'pattern';                          % 'gradient'/'anneal'/'pattern'/'multis'
+D.method   = 'multis';                          % 'gradient'/'anneal'/'pattern'/'multis'
 D.useVC    = false;                              % use bootstrapped VC matrix?
 
 %          [1      2      3      4      5      6      7      8      9      10     11     12     13     14     15     16     17    ]
 %          [theta  omega  rhoZ   muZ    sigZ   delK   lambK  delN   lambN  alpha  beta   gama   tauC   tauN   Pext   MQent  SQent ] 
-D.initX1 = [0.728  0.500  0.933  0.000  0.384  0.110  0.377  0.300  0.400  0.001  0.892  0.070  0.350  0.000  0.095  2.000  1.000 ];
+D.initX1 = [0.798  0.262  0.850  0.000  0.610  0.097  0.386  0.184  0.058  0.001  0.897  0.070  0.350  0.000  0.095  2.000  1.000 ];
 
 %         [theta  omega  rhoZ   sigZ   delK   lambK  delN   lambN  beta ]
 D.initX = [0.728  0.500  0.933  0.384  0.110  0.377  0.300  0.400  0.892];
-D.lbX   = [0.600, 0.100, 0.850, 0.050, 0.050, 0.050, 0.100, 0.050, 0.800];
-D.ubX   = [0.800, 0.900, 0.990, 0.800, 0.150, 0.950, 0.700, 0.950, 0.970];
+D.lbX   = [0.600, 0.100, 0.800, 0.050, 0.050, 0.050, 0.100, 0.050, 0.800];
+D.ubX   = [0.900, 0.900, 0.990, 0.900, 0.150, 0.950, 0.700, 0.950, 0.970];
 
 %%
 %{
 % Prepare starting points
-N    = 600;
+N    = 1000;
 L    = size(D.initX,2);
 b    = zeros(N,L);
 good = true(N,1);
@@ -79,7 +80,7 @@ if (D.useVC)
 else
    %wgts = ones(size(D.moms));
    %D.W  = diag((abs(D.Dmom(D.moms)).^-2)'.*wgts)./sum(wgts);
-   D.W  = diag([1.6 10 10 4 10 10 4 6 8 5 8 5 8 10 10 10 10]);
+   D.W  = diag([1.3 2.1 7.9   1.2 2.1 7.9   2.7 4.0 7.3   2.5 5.3 7.9   2.1 4.7   5.0 4.3   7.9 7.9 7.9 7.9]);
    %clear wgts;
 end
 
