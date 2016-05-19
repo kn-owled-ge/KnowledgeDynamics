@@ -4,10 +4,9 @@
 clear all; format short; format compact; beep on; close all;
 warning('on','all');
 
-%      [1      2      3      4      5      6      7      8      9      10     11     12 
-%      [theta  rhoZ   muZ    sigZ   delK   lambK  beta   tauC   pi     MQent  SQent ] 
-over = [0.728  0.933  0.144  0.368  0.110  0.381  0.892  0.396  0.095  2.000  1.000 ]; %Q =        0.183
-
+%      [1      2      3      4      5      6      7      8      9      10     11     12     13     14     15     16     17    ]
+%      [theta  omega  rhoZ   muZ    sigZ   delK   lambK  delN   lambN  alpha  beta   gama   tauC   tauN   Pext   MQent  SQent ] 
+over = [0.728  0.500  0.933  0.000  0.384  0.110  0.377  0.300  0.400  0.001  0.892  0.070  0.350  0.000  0.095  2.000  1.000 ];
 fid  = 1; % {1 = screen, NaN = file}
 
 %%%%% ModelF.m %%%%%%

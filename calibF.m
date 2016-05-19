@@ -19,11 +19,40 @@ clear fid;
 
 % Print params being used
 %{
-fprintf(P.fid,'Params: theta  omega  rhoZ   sigZ   tau    lamb1k lamb2k lamb3k lamb1n lamb2n lamb3n alpha  beta   pi     MQent  SQent\n');
+fprintf(P.fid,'Params:\n');
 for i=1:numel(over)
    fprintf(P.fid,'%7.3f\n', over(i));
 end
 %}
+
+% technology parameter values
+P.theta  = over(1);                                  % elasticity of capital in income
+P.omega  = over(2);                                  % elasticiy of phy capital in total capital
+P.rhoZ   = over(3);                                  % persistence of income proc
+P.muZ    = over(4);                                  % mean of income proc is hard coded zero
+P.sigZ   = over(5);                                  % SD of income proc shock
+P.delK   = over(6);                                  % depreciation of physical capital
+P.lambK  = over(7);                                  % physical adjustment elasticity
+P.delN   = over(8);                                  % depreciation of knowledge capital
+P.lambN  = over(9);                                  % knowledge adjustment elasticity
+P.alpha  = over(10);                                 % knowledge binding constraint
+P.beta   = over(11);                                 % discount factor
+P.gama   = over(12);                                 % financial friction slope
+P.tauC   = over(13);                                 % corporate tax rate
+P.tauN   = over(14);                                 % RD tax credit
+P.Pext   = over(15);                                 % probability of random exit per year
+P.MQent  = over(16);                                 % mean of Q at entry
+P.SQent  = over(17);                                 % SD of Q at entry
+
+% Financial friction
+P.doFin  = false;                                    % Do financial friction?
+P.FinEx  = false;                                    % Do firms violating the constraint exit?
+
+% exit values
+P.ExEnt = false;                                      % is there exit (and entry) in the model?
+P.Vexit = 0;                                          % value scale too low to remain
+P.Kexit = 0;                                          % capital scale too low to remain
+P.Bexit = 5;                                          % minimal value scale to register as major bankruptcy
 
 % Technical estimation values
 P.VIter   = 300;                                      % stop VFI after this many iterations
@@ -34,31 +63,10 @@ P.SMOMprn = false;                                    % print simulated moments
 P.DMOMprn = false;                                    % print data moments
 P.EMOMprn = false;                                    % print relative moment errors
 P.Vload   = true;                                     % load previous value function?
-P.Vsave   = false;                                     % save current value function?
-
-% technology parameter values
-P.theta  = over(1);                                  % capital's scale in income
-P.rhoZ   = over(2);                                  % persistence of income proc
-P.muZ    = over(3);                                  % mean of income proc is hard coded zero
-P.sigZ   = over(4);                                  % SD of income proc shock
-P.delK   = over(5);                                  % depreciation of physical capital
-P.lambK  = over(6);                                  % adjustment elasticity
-P.beta   = over(7);                                  % Discount factor=1/(1+r*) (to match data going from DV to V)
-P.tauC   = over(8);                                  % wedge from OI to FCF (tax rate*)
-P.gama   = over(9);                                  % financing friction coefficient
-P.Pext   = over(10);                                 % Probability of random exit per year = pi
-P.MQent  = over(11);                                 % Mean of Q at entry
-P.SQent  = over(12);                                 % SD of Q at entry
-
-% Financial friction
-P.doFin  = true;                                     % Do financial friction?
-P.FinEx  = false;                                     % Do firms violating the constraint exit?
-
-% exit values
-P.ExEnt = false;                                      % is there exit (and entry) in the model?
-P.Vexit = 0;                                          % value scale too low to remain
-P.Kexit = 0;                                          % capital scale too low to remain
-P.Bexit = 5;                                          % minimal value scale to register as major bankruptcy
+P.Vsave   = false;                                    % save current value function?
+%P.Nmoms   = int32(629);                               % number of moments returned by moment func
+P.Nmoms   = int32(20);                                % number of moments returned by moment func
+%P.Nmoms   = int32(24);                                % number of moments returned by moment func
 
 % tolerance values
 P.Verr   = 1e-2;                                      % Maximum change in value function to stop VFI
@@ -71,8 +79,6 @@ P.Ts1    = int32(400);                                % number of periods in ini
 P.Tb     = int32(300);                                % number of burn-in periods
 P.Ts2    = int32(30);                                 % number of periods in moment simulations
 P.Reps   = int32(1);                                  % number of repeats for moment simulations
-%P.Nmoms  = int32(311);                                % number of moments returned by moment func
-P.Nmoms  = int32(15);                                 % number of moments returned by moment func
 P.VCreps = int32(100);                                % number of repeats for VC bootstrap
 
 % Construct grid for physical stock
@@ -85,17 +91,13 @@ kp    = linspace(kmin,kmax,P.nkp)';
 clear kmin kmax;
 
 % Construct grid for knowledge stock
-%nmin   = 0;
-%nmax   = 15;
-%P.nn   = 31;
-%n      = linspace(nmin,nmax,P.nn)';
-%P.nnp  = P.nn*5;
-%np     = linspace(nmin,nmax,P.nnp)';
-%clear nmin nmax;
-P.nn  = 1;
-P.nnp = 1;
-n     = 0;
-np    = 0;
+nmin   = 0;
+nmax   = 15;
+P.nn   = 31;
+n      = linspace(nmin,nmax,P.nn)';
+P.nnp  = P.nn*5;
+np     = linspace(nmin,nmax,P.nnp)';
+clear nmin nmax;
 
 % Construct grid for Z
 P.nz     = 15;
@@ -125,12 +127,26 @@ w    = 0;
 fail = false;
 r    = (1-P.beta)/P.beta;
 
+% KUB not too binding
+P.maxN   = 1 - P.delN/P.lambN + (P.delN/P.lambN)*(P.alpha^-P.lambN);
+fail = fail | (P.maxN<1.25);
+
+% ratio of steady-state knowledge to physical capital reasonable
+% TODO: add muN calculation here after working out equations
+%eK   = 1/(P.lamb3k*(1-P.lamb1k));
+%eN   = 1/(P.lamb3n*(1-P.lamb1n));
+%muN  = (delK*(1-P.omega)*(r*eK + 1))/(delN*P.omega*(r*eN + 1));
+%fail = fail | (muN<0.1) | (muN>10);
+muN = 1;
+
 % FCF at max(z) for stagnant scale 10 firm is positive, and value is
 % within reasonable scale
 lK = 10;
-OI = exp(z(end) + P.theta*lK);
+lN = lK + log(muN);
+OI = exp(z(end) + P.theta*(P.omega*lK + (1-P.omega)*lN));
 dK = P.delK*exp(lK);
-FC = (1-P.tauC)*OI + P.tauC*P.delK*exp(lK) - dK;
+dN = P.delN*exp(lN);
+FC = (1-P.tauC)*OI + P.tauC*P.delK*exp(lK) - dK -(1-P.tauC-P.tauN)*dN;
 TV = FC/r;
 fail = fail | (TV<exp(lK-1)) | (TV>exp(lK+8));
 

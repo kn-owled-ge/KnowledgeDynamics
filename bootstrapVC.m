@@ -15,7 +15,7 @@ warning('on','all');
 
 meaninf = mean(inf,1);
 inf1    = inf - ones(reps,1)*meaninf;
-VC      = inf1'*inf;
+VC      = inf1'*inf1;
 
 save (VCname, 'VC');
 
