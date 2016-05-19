@@ -10,19 +10,20 @@ CPUS=str2num(getenv('SLURM_CPUS_PER_TASK'));
 pc.JobStorageLocation=strcat('/local_scratch/',JOB_ID);
 parpool(pc,CPUS);
 
+%%
 
 % Prepare params
-D.method   = 'multis';                          % 'gradient'/'anneal'/'pattern'/'multis'
+D.method   = 'pattern';                          % 'gradient'/'anneal'/'pattern'/'multis'
 D.useVC    = false;                              % use bootstrapped VC matrix?
 
 %          [1      2      3      4      5      6      7      8      9      10     11     12     13     14     15     16     17    ]
 %          [theta  omega  rhoZ   muZ    sigZ   delK   lambK  delN   lambN  alpha  beta   gama   tauC   tauN   Pext   MQent  SQent ] 
-D.initX1 = [0.798  0.262  0.850  0.000  0.610  0.097  0.386  0.184  0.058  0.001  0.897  0.070  0.350  0.000  0.095  2.000  1.000 ];
+D.initX1 = [0.900  0.305  0.908  0.000  0.291  0.112  0.331  0.276  0.171  0.001  0.876  0.070  0.350  0.000  0.095  2.000  1.000 ];
 
-%         [theta  omega  rhoZ   sigZ   delK   lambK  delN   lambN  beta ]
-D.initX = [0.728  0.500  0.933  0.384  0.110  0.377  0.300  0.400  0.892];
-D.lbX   = [0.600, 0.100, 0.800, 0.050, 0.050, 0.050, 0.100, 0.050, 0.800];
-D.ubX   = [0.900, 0.900, 0.990, 0.900, 0.150, 0.950, 0.700, 0.950, 0.970];
+%         [theta  omega  rhoZ   sigZ   lambK  delN   lambN  beta ]
+D.initX = [0.900  0.305  0.908  0.291  0.331  0.276  0.171  0.876];
+D.lbX   = [0.700, 0.100, 0.800, 0.050, 0.050, 0.100, 0.050, 0.800];
+D.ubX   = [0.990, 0.900, 0.990, 0.900, 0.950, 0.700, 0.950, 0.970];
 
 %%
 %{
@@ -41,11 +42,10 @@ for i=1:N
    over(2)  = b(i,2);
    over(3)  = b(i,3);
    over(5)  = b(i,4);
-   over(6)  = b(i,5);
-   over(7)  = b(i,6);
-   over(8)  = b(i,7);
-   over(9)  = b(i,8);
-   over(11) = b(i,9);
+   over(7)  = b(i,5);
+   over(8)  = b(i,6);
+   over(9)  = b(i,7);
+   over(11) = b(i,8);
 
    [~, ~, ~, ~, ~, ~, ~, ~, ~, ~, ~, fail] = calibF(over,fid);
    good(i) = ~fail;
@@ -85,7 +85,7 @@ else
 end
 
 % prepare function pointer for fmincon
-Qfunc = @(b) Qobj(D, b);
+Qfunc = @(b) Qobj3(D, b);
 %%
 warning('off','all');
 warning('off','stats:robustfit:RankDeficient');

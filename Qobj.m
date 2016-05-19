@@ -6,10 +6,10 @@ over(1)  = b(1);
 over(2)  = b(2);
 over(3)  = b(3);
 over(5)  = b(4);
-over(6)  = b(5);
-over(7)  = b(6);
-over(8)  = b(7);
-over(9)  = b(8);
+over(7)  = b(5);
+over(8)  = b(6);
+over(9)  = b(7);
+over(10) = b(8);
 over(11) = b(9);
 
 [Smom,~,~] = modelF(over,D.fid);
